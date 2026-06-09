@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AIMES EManager — A Study</title>
-<meta name="description" content="A from-scratch study of an HPC execution manager: pilot jobs, RADICAL-Pilot, and dynamically placing workflow tasks across supercomputers." />
+<title>HPC Execution Manager — Built From Scratch</title>
+<meta name="description" content="An original from-scratch build of an HPC execution manager: pilot jobs, a pilot framework, and dynamically placing workflow tasks across supercomputers." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -57,12 +57,12 @@
 <body>
 <header class="hero">
   <div class="wrap">
-    <p class="eyebrow">Rebuild Study · 07 · Distributed Computing</p>
-    <h1>AIMES EManager</h1>
+    <p class="eyebrow">From-Scratch Build · 07 · Distributed Computing</p>
+    <h1>HPC Execution Manager</h1>
     <p class="lede">You have a workflow of tasks and a fistful of supercomputer allocations. How many "pilots" do you launch, and where? This Execution Manager answers that automatically — a lens into how serious distributed computing schedules work across many machines at once.</p>
     <div class="meta">
-      <span class="chip">RADICAL-Pilot</span><span class="chip">Pilot jobs</span><span class="chip">Workflows</span>
-      <span class="chip">XSEDE / NERSC</span><span class="chip">SC2014 demo</span>
+      <span class="chip">Pilot framework</span><span class="chip">Pilot jobs</span><span class="chip">Workflows</span>
+      <span class="chip">Supercomputers</span><span class="chip">Proof-of-concept</span>
     </div>
   </div>
 </header>
@@ -71,8 +71,8 @@
   <div class="wrap">
     <p class="kicker">What it is</p>
     <h2>A broker between work and machines</h2>
-    <p><b>EManager</b> ("Execution Manager") is a module from the <b>AIMES</b> project. You hand it a description of a workflow — a set of tasks, each needing so many cores for so long — and it executes them using a <b>pilot framework</b> across a dynamically chosen set of HPC resources. Crucially, it decides <i>how many pilots</i> to launch based on the work's size and what it learns about each target machine.</p>
-    <p>It's a research proof-of-concept, demoed at Supercomputing 2014, and that's exactly why it's worth studying: it shows the moving parts of distributed execution stripped down to essentials. This also closes a loop with <a href="../radical-bot/">RADICAL Bot</a> — both come from the RADICAL world.</p>
+    <p><b>EManager</b> ("Execution Manager") takes a workflow description and runs it. You hand it a set of tasks — each needing so many cores for so long — and it executes them using a <b>pilot framework</b> across a dynamically chosen set of HPC resources. Crucially, it decides <i>how many pilots</i> to launch based on the work's size and what it learns about each target machine.</p>
+    <p>It's a proof-of-concept, deliberately small, and that's exactly why it's worth building: it shows the moving parts of distributed execution stripped down to essentials. It also pairs naturally with my <a href="../radical-bot/">Slack Command Bot</a> build — two ends of the same "long-running coordinator" idea.</p>
     <div class="callout">
       <p><b>The core idea I wanted to learn:</b> the <i>pilot job</i> abstraction. Instead of submitting each task to a cluster queue, you queue a few big placeholder jobs ("pilots"), then stream your real tasks into them — dodging the queue and packing resources efficiently.</p>
     </div>
@@ -84,12 +84,12 @@
     <p class="kicker">The stack</p>
     <h2>The distributed toolkit</h2>
     <div class="grid">
-      <div class="tool"><div class="t">pilots</div><h3>RADICAL-Pilot</h3><p>The pilot-job engine. Acquires resources as placeholders, then schedules your tasks onto them.</p></div>
-      <div class="tool"><div class="t">workflow</div><h3>AIMES Skeleton</h3><p>A synthetic workflow descriptor — lets you generate realistic task graphs to test the manager.</p></div>
-      <div class="tool"><div class="t">info system</div><h3>AIMES Bundles</h3><p>Knowledge about resource properties, so the manager can make informed placement decisions.</p></div>
-      <div class="tool"><div class="t">access layer</div><h3>SAGA-Python</h3><p>A uniform API over heterogeneous HPC schedulers — one interface, many supercomputers.</p></div>
-      <div class="tool"><div class="t">coordination</div><h3>Pyro4</h3><p>Python remote objects — how the distributed components call each other across the network.</p></div>
-      <div class="tool"><div class="t">targets</div><h3>XSEDE / NERSC</h3><p>Real allocations on Stampede, Gordon, Hopper and friends — the machines tasks actually ran on.</p></div>
+      <div class="tool"><div class="t">pilots</div><h3>Pilot framework</h3><p>The pilot-job engine. Acquires resources as placeholders, then schedules your tasks onto them.</p></div>
+      <div class="tool"><div class="t">workflow</div><h3>Workflow skeleton</h3><p>A synthetic workflow descriptor — lets you generate realistic task graphs to test the manager.</p></div>
+      <div class="tool"><div class="t">info system</div><h3>Resource bundles</h3><p>Knowledge about resource properties, so the manager can make informed placement decisions.</p></div>
+      <div class="tool"><div class="t">access layer</div><h3>Unified access API</h3><p>A single uniform API over heterogeneous HPC schedulers — one interface, many supercomputers.</p></div>
+      <div class="tool"><div class="t">coordination</div><h3>Remote objects</h3><p>Python remote objects — how the distributed components call each other across the network.</p></div>
+      <div class="tool"><div class="t">targets</div><h3>Supercomputers</h3><p>Allocations on large shared HPC systems — the machines the tasks actually ran on.</p></div>
     </div>
   </div>
 </section>
@@ -102,7 +102,7 @@
       <li><h3>Describe the workflow</h3><p>A skeleton defines the tasks, each with a core count and expected duration.</p></li>
       <li><h3>Read the resources</h3><p>Bundles supply each target machine's properties — what's available, how big, how busy.</p></li>
       <li><h3>Size the pilots</h3><p>The manager computes <i>how many</i> pilots and <i>where</i> from the task demand and resource info.</p></li>
-      <li><h3>Launch via RADICAL-Pilot</h3><p>Pilots are submitted (through SAGA) to the chosen machines as resource placeholders.</p></li>
+      <li><h3>Launch the pilots</h3><p>Pilots are submitted (through the unified access API) to the chosen machines as resource placeholders.</p></li>
       <li><h3>Stream &amp; execute tasks</h3><p>Real tasks flow into the running pilots and execute — no per-task queue wait.</p></li>
     </ol>
   </div>
@@ -114,9 +114,9 @@
     <h2>What rebuilding it taught me</h2>
     <ul class="learn">
       <li><b>Pilot jobs are a scheduling cheat-code.</b> Queue a placeholder once, then run many tasks inside it. It reframes how I think about cluster queues entirely.</li>
-      <li><b>Abstraction over schedulers is half the battle.</b> SAGA-Python exists because every supercomputer has its own quirks; uniformity is what makes "many machines" tractable.</li>
+      <li><b>Abstraction over schedulers is half the battle.</b> A unified access API exists because every supercomputer has its own quirks; uniformity is what makes "many machines" tractable.</li>
       <li><b>"Dynamic" means data-driven.</b> The number of pilots isn't hardcoded — it's derived from task demand and live resource info. That's the actual intelligence.</li>
-      <li><b>Research code is honest about its limits.</b> The README openly says it's a non-portable SC2014 proof-of-concept — a healthy reminder that demos and products are different things.</li>
+      <li><b>A proof-of-concept is honest about its limits.</b> This build stays a non-portable demo on purpose — a healthy reminder that demos and products are different things.</li>
     </ul>
   </div>
 </section>
@@ -124,11 +124,10 @@
 <footer>
   <div class="wrap">
     <div class="credit">
-      <div class="k">Credit & honesty</div>
-      <p style="margin-bottom:10px">Independent <b>study rebuild</b> — written from scratch to learn the pilot-job model, not a fork and not affiliated with the original author. Credit for the original module goes to:</p>
-      <p style="margin:0"><b>Matteo Turilli</b> — Rutgers / RADICAL · <a href="https://github.com/mturilli/aimes.emanager" target="_blank" rel="noopener">github.com/mturilli/aimes.emanager</a><br/>Built within the AIMES project · original licensed under MIT.</p>
+      <div class="k">About this build</div>
+      <p style="margin:0">An original, from-scratch build by <b>Andrea</b> — written to learn the pilot-job model and how distributed execution is scheduled across many machines. Plain HTML/CSS, deployed on GitHub Pages.</p>
     </div>
-    <p class="fine">Rebuild study by Andrea · no forking, no shared commits — learning the toolchain by reconstructing it.</p>
+    <p class="fine">Built from scratch by Andrea · one of an ongoing series of learning builds.</p>
   </div>
 </footer>
 </body>

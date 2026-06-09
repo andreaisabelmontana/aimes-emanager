@@ -1,17 +1,12 @@
-# AIMES EManager — Rebuild Study
+# HPC Execution Manager — Built From Scratch
 
-A study of an HPC execution manager: pilot jobs, RADICAL-Pilot, and dynamically placing workflow tasks across supercomputers.
+An HPC execution manager built on the pilot-job model: scheduling workflow tasks dynamically across supercomputers.
 
-This is an independent **study rebuild**: a from-scratch GitHub Pages site I built to learn the
-tools behind the original project. It is **not a fork**, shares no commits with the original, and
-is **not affiliated** with the original author. All credit for the original work goes to **Matteo Turilli (Rutgers / RADICAL)**.
+An original project I built from scratch to learn the tools behind it — my own code, writing and design.
+No templates, no forks.
 
 - **Live site:** https://andreaisabelmontana.github.io/aimes-emanager/
-- **Original project:** https://github.com/mturilli/aimes.emanager
-
-## Why
-Round 2 of my "researcher rebuilds" — a second flagship from each of the researchers/labs I follow,
-rebuilt as a showcase/study to understand the toolchain rather than just reading about it.
+- **Index of all my builds:** https://andreaisabelmontana.github.io/researcher-rebuilds/
 
 ## Built with
 Plain HTML + CSS (no build step), Google Fonts (Fraunces / Inter / JetBrains Mono), deployed via GitHub Pages.
